@@ -1,0 +1,43 @@
+name: PoMe Auto Update Engine
+
+on:
+  schedule:
+    - cron: '10 18 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-database:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 2. Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: 3. Unduh File
+        run: |
+          echo "Mengunduh data..."
+          curl -L "${{ secrets.GP_QUALITY }}" -o GP_Quality.json
+          curl -L "${{ secrets.GP_LASTUPDATE }}" -o GP_LastUpdate.json
+          curl -L "${{ secrets.GM_CACHE }}" -o GM_Cache.json
+          curl -L "${{ secrets.GM_MOBILE }}" -o GM_Mobile_Cache.json
+          curl -L "${{ secrets.Y8_CACHE }}" -o Y8_Cache.json
+
+      - name: 4. Jalankan Mesin
+        run: |
+          python gp.py
+          python gm.py
+          python y8.py
+
+      - name: 5. Hapus File
+        run: |
+          rm *.json
+          
+          git config --global user.name "PoMe Auto Bot"
+          git config --global user.email "bot@pome.com"
+          git add bridge/
+          git commit -m "🤖 Auto-update data" || echo "Tidak ada perubahan data"
+          git push
