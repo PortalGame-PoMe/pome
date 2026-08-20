@@ -38,6 +38,6 @@ jobs:
           
           git config --global user.name "PoMe Auto Bot"
           git config --global user.email "bot@pome.com"
-          git add bridge/
+          git add pome/bridge/
           git commit -m "🤖 Auto-update data" || echo "Tidak ada perubahan data"
           git push
