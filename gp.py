@@ -3,7 +3,7 @@ import os
 import math
 import base64
 
-PASSWORD = "${{ secrets.YOUR_PASSWORD }}"
+PASSWORD = os.environ["PORTAL_PASSWORD"]
 LIMIT = 60
 
 FILES_TO_PROCESS = [

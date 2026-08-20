@@ -1,6 +1,6 @@
 import json, os, math, base64, re
 
-PASSWORD = "${{ secrets.YOUR_PASSWORD }}"
+PASSWORD = os.environ["PORTAL_PASSWORD"]
 INPUT_FILE = 'Y8_Cache.json'
 BASE_DIR = 'bridge/y8/'
 LIMIT = 60

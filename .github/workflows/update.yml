@@ -27,6 +27,8 @@ jobs:
           curl -L "${{ secrets.Y8_CACHE }}" -o Y8_Cache.json
 
       - name: 4. Jalankan Mesin
+        env:
+            PORTAL_PASSWORD: ${{ secrets.YOUR_PASSWORD }}
         run: |
           python gp.py
           python gm.py

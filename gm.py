@@ -1,6 +1,6 @@
 import json, os, math, base64
 
-PASSWORD = "${{ secrets.YOUR_PASSWORD }}"
+PASSWORD = os.environ["PORTAL_PASSWORD"]
 LIMIT = 60
 
 def encrypt_data(data_dict, password):
