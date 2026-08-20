@@ -2,7 +2,7 @@ name: PoMe Auto Update Engine
 
 on:
   schedule:
-    - cron: '10 18 * * *'
+    - cron: '01 18 * * *'
   workflow_dispatch:
 
 jobs:
