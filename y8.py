@@ -2,7 +2,7 @@ import json, os, math, base64, re
 
 PASSWORD = "${{ secrets.YOUR_PASSWORD }}"
 INPUT_FILE = 'Y8_Cache.json'
-BASE_DIR = 'pome/bridge/y8/'
+BASE_DIR = 'bridge/y8/'
 LIMIT = 60
 
 def encrypt_data(data_dict, password):

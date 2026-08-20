@@ -12,8 +12,8 @@ def encrypt_data(data_dict, password):
     return base64.b64encode(encrypted_bytes).decode('utf-8')
 
 CONFIGS = [
-    {'file': 'GM_Cache.json', 'dir': 'pome/bridge/gm/'},
-    {'file': 'GM_Mobile_Cache.json', 'dir': 'pome/bridge/gm/mobile/'}
+    {'file': 'GM_Cache.json', 'dir': 'bridge/gm/'},
+    {'file': 'GM_Mobile_Cache.json', 'dir': 'bridge/gm/mobile/'}
 ]
 
 for cfg in CONFIGS:

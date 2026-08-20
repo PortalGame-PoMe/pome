@@ -30,7 +30,7 @@ def encrypt_data(data_dict, password):
 for file_info in FILES_TO_PROCESS:
     input_file = file_info['input']
     sort_name = file_info['sort_name']
-    base_dir = f'pome/bridge/gp/{sort_name}/'
+    base_dir = f'bridge/gp/{sort_name}/'
     
     print(f"Membaca file {input_file}...")
     try:
