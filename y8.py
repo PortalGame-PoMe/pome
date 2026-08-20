@@ -24,9 +24,13 @@ junk_words = ["front upload", "purchase equipment", "touchscreen", "game contest
 
 for g in raw_data:
     game_link = g.get('embed_url') or g.get('y8_url') or ''
-    safe_url = game_link.rstrip('/').lower()
-    if safe_url != "" and safe_url not in seen_urls:
-        seen_urls.add(safe_url)
+    
+    safe_url = game_link.strip()
+    
+    check_url = safe_url.split('?')[0].lower().rstrip('/')
+    
+    if safe_url != "" and check_url not in seen_urls:
+        seen_urls.add(check_url)
         cat_list = [t.strip() for t in g.get('tags', '').split(',') if t.strip()]
         clean_cats = []
         for t in cat_list:
