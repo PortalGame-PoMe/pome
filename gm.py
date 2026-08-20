@@ -5,7 +5,7 @@ LIMIT = 60
 
 def encrypt_data(data_dict, password):
     json_bytes = json.dumps(data_dict, ensure_ascii=False).encode('utf-8')
-    pass_bytes = password.encode('utf-8')
+    pass_bytes = password.strip().encode('utf-8')
     encrypted_bytes = bytearray()
     for i in range(len(json_bytes)):
         encrypted_bytes.append(json_bytes[i] ^ pass_bytes[i % len(pass_bytes)])
