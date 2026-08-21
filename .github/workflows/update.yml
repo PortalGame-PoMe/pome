@@ -68,7 +68,9 @@ jobs:
       - name: 6. Kirim Notifikasi OneSignal
         if: success()
         run: |
-          echo "Data sukses diperbarui. Mengirim Notifikasi..."
+          echo "Data sukses diperbarui. Menunggu 2 menit untuk mengirim Notifikasi..."
+          sleep 120
+          echo "Data siap. Mengirim Notifikasi..."
           curl --request POST \
                --url https://onesignal.com/api/v1/notifications \
                --header 'Authorization: Basic ${{ secrets.ONESIGNAL_API_KEY }}' \
