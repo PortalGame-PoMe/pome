@@ -35,6 +35,14 @@ for cfg in CONFIGS:
         if safe_url != "" and safe_url not in seen_urls:
             seen_urls.add(safe_url)
             cat = g.get('category', 'Game')
+            
+            # ==========================================
+            # 🛡️ PELINDUNG KATEGORI KOSONG (JADIKAN "Lainnya")
+            # ==========================================
+            if not cat or str(cat).strip() == "":
+                cat = "Lainnya"
+            # ==========================================
+
             formatted = {
                 "id": g.get('id', ''), "title": g.get('title', ''), "url": g.get('url', ''),
                 "thumb": g.get('thumb') or g.get('thumbnail_256x256') or g.get('image', ''),
@@ -75,4 +83,4 @@ for cfg in CONFIGS:
     with open(os.path.join(search_dir, 'index.json'), 'w', encoding='utf-8') as f:
         f.write(encrypt_data(all_games, PASSWORD))
 
-print("\n✅ Proses Portal 1 Selesai!")
+print("\n✅ Proses Portal 2 Selesai!")
