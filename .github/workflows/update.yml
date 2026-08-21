@@ -20,11 +20,11 @@ jobs:
       - name: 3. Unduh File
         run: |
           echo "Mengunduh data..."
-          curl -L "${{ secrets.GP_QUALITY }}" -o GP_Quality.json
-          curl -L "${{ secrets.GP_LASTUPDATE }}" -o GP_LastUpdate.json
-          curl -L "${{ secrets.GM_CACHE }}" -o GM_Cache.json
-          curl -L "${{ secrets.GM_MOBILE }}" -o GM_Mobile_Cache.json
-          curl -L "${{ secrets.Y8_CACHE }}" -o Y8_Cache.json
+          curl -fL "${{ secrets.GP_QUALITY }}" -o GP_Quality.json
+          curl -fL "${{ secrets.GP_LASTUPDATE }}" -o GP_LastUpdate.json
+          curl -fL "${{ secrets.GM_CACHE }}" -o GM_Cache.json
+          curl -fL "${{ secrets.GM_MOBILE }}" -o GM_Mobile_Cache.json
+          curl -fL "${{ secrets.Y8_CACHE }}" -o Y8_Cache.json
 
       - name: 4. Jalankan Mesin
         env:
