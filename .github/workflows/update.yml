@@ -1,8 +1,6 @@
 name: PoMe Auto Update Engine
 
 on:
-  schedule:
-    - cron: '01 18 * * *'
   workflow_dispatch:
 
 jobs:
@@ -17,24 +15,47 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: 3. Unduh File
+      - name: 3. Unduh File (Dengan Auto-Retry)
         run: |
           echo "Mengunduh data..."
-          curl -fL "${{ secrets.GP_QUALITY }}" -o GP_Quality.json
-          curl -fL "${{ secrets.GP_LASTUPDATE }}" -o GP_LastUpdate.json
-          curl -fL "${{ secrets.GM_CACHE }}" -o GM_Cache.json
-          curl -fL "${{ secrets.GM_MOBILE }}" -o GM_Mobile_Cache.json
-          curl -fL "${{ secrets.Y8_CACHE }}" -o Y8_Cache.json
+          
+          # Fungsi looping 5x dengan jeda 60 detik
+          download_with_retry() {
+            local url=$1
+            local output=$2
+            local max_attempts=5
+            local attempt=1
+            
+            while [ $attempt -le $max_attempts ]; do
+              echo "Mencoba unduh $output (Percobaan $attempt/$max_attempts)..."
+              if curl -fL "$url" -o "$output"; then
+                echo "✅ Berhasil mengunduh $output!"
+                return 0
+              else
+                echo "⚠️ Gagal. Menunggu 60 detik sebelum mencoba lagi..."
+                sleep 60
+                attempt=$((attempt+1))
+              fi
+            done
+            echo "❌ Gagal mengunduh $output secara permanen."
+            exit 1
+          }
+          
+          download_with_retry "${{ secrets.GP_QUALITY }}" "GP_Quality.json"
+          download_with_retry "${{ secrets.GP_LASTUPDATE }}" "GP_LastUpdate.json"
+          download_with_retry "${{ secrets.GM_CACHE }}" "GM_Cache.json"
+          download_with_retry "${{ secrets.GM_MOBILE }}" "GM_Mobile_Cache.json"
+          download_with_retry "${{ secrets.Y8_CACHE }}" "Y8_Cache.json"
 
       - name: 4. Jalankan Mesin
         env:
-            PORTAL_PASSWORD: ${{ secrets.YOUR_PASSWORD }}
+          PORTAL_PASSWORD: ${{ secrets.YOUR_PASSWORD }}
         run: |
           python gp.py
           python gm.py
           python y8.py
 
-      - name: 5. Hapus File
+      - name: 5. Hapus File & Simpan
         run: |
           rm *.json
           
@@ -43,3 +64,19 @@ jobs:
           git add bridge/
           git commit -m "🤖 Auto-update data" || echo "Tidak ada perubahan data"
           git push
+
+      - name: 6. Kirim Notifikasi OneSignal
+        if: success()
+        run: |
+          echo "Data sukses diperbarui. Mengirim Notifikasi..."
+          curl --request POST \
+               --url https://onesignal.com/api/v1/notifications \
+               --header 'Authorization: Basic ${{ secrets.ONESIGNAL_API_KEY }}' \
+               --header 'Content-Type: application/json' \
+               --data '{
+                 "app_id": "${{ secrets.ONESIGNAL_APP_ID }}",
+                 "included_segments": ["All"],
+                 "headings": {"en": "Game Baru Ditambahkan! 🎮"},
+                 "contents": {"en": "Koleksi game PoMe baru saja diperbarui. Yuk cek dan mainkan sekarang!"},
+                 "large_icon": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBy7d-xYz6vUhoMFVdBEb1-WDtjxwZJNPNWyhvU_e1uvj5pboDGILAsR5gsFLYCsntlQ6judFrJFgLdTpCDiw-0KAM7edHxzpu6Dxn93Uc6SlowRVVKgMPrhrAlJA_JXCQMlCt_dDFubPFQfDMh93tFgqQmdGjjzlGkjxCHzqzNrHsHnaAPPprS1i2tRs/s512/ic_pome_logo.png"
+               }'
