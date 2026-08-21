@@ -2,6 +2,15 @@ name: PoMe Auto Update Engine
 
 on:
   workflow_dispatch:
+    inputs:
+      judul_notif:
+        description: 'Judul Notifikasi'
+        required: false
+        default: 'Game Baru Ditambahkan! 🎮'
+      isi_notif:
+        description: 'Isi Notifikasi'
+        required: false
+        default: 'Koleksi game PoMe baru saja diperbarui. Yuk mainkan sekarang!'
 
 jobs:
   update-database:
@@ -78,7 +87,7 @@ jobs:
                --data '{
                  "app_id": "${{ secrets.ONESIGNAL_APP_ID }}",
                  "included_segments": ["All"],
-                 "headings": {"en": "Game Baru Ditambahkan! 🎮"},
-                 "contents": {"en": "Koleksi game PoMe baru saja diperbarui. Yuk cek dan mainkan sekarang!"},
+                 "headings": {"en": "${{ github.event.inputs.judul_notif }}"},
+                 "contents": {"en": "${{ github.event.inputs.isi_notif }}"},
                  "large_icon": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBy7d-xYz6vUhoMFVdBEb1-WDtjxwZJNPNWyhvU_e1uvj5pboDGILAsR5gsFLYCsntlQ6judFrJFgLdTpCDiw-0KAM7edHxzpu6Dxn93Uc6SlowRVVKgMPrhrAlJA_JXCQMlCt_dDFubPFQfDMh93tFgqQmdGjjzlGkjxCHzqzNrHsHnaAPPprS1i2tRs/s512/ic_pome_logo.png"
                }'
