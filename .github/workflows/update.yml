@@ -55,6 +55,8 @@ jobs:
           download_with_retry "${{ secrets.GM_CACHE }}" "GM_Cache.json"
           download_with_retry "${{ secrets.GM_MOBILE }}" "GM_Mobile_Cache.json"
           download_with_retry "${{ secrets.Y8_CACHE }}" "Y8_Cache.json"
+          download_with_retry "${{ secrets.PG_RANKING }}" "PG_Ranking.json"
+          download_with_retry "${{ secrets.PG_NEW }}" "PG_New.json"
 
       - name: 4. Jalankan Mesin
         env:
@@ -63,6 +65,7 @@ jobs:
           python gp.py
           python gm.py
           python y8.py
+          python pg.py
 
       - name: 5. Hapus File & Simpan
         run: |
