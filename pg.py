@@ -50,6 +50,11 @@ for file_info in FILES_TO_PROCESS:
             
             cat = g.get('category', 'Game')
             
+            # 🚀 TANGKAP SEMUA KATEGORI
+            all_cats = g.get('allCategories', [cat])
+            if not all_cats:
+                all_cats = [cat]
+            
             formatted_game = {
                 "id": g.get('id', ''),
                 "title": g.get('title', ''),
@@ -57,13 +62,17 @@ for file_info in FILES_TO_PROCESS:
                 "thumb": g.get('thumb', ''),
                 "video": g.get('video', ''),
                 "category": cat,
-                "provider": "playgama"
+                "allCategories": all_cats, # Bawa array ini untuk mesin pencari HTML
+                "provider": "playgama",
+                "tags": g.get('tags', '')
             }
             all_games.append(formatted_game)
             
-            if cat not in categories_dict:
-                categories_dict[cat] = []
-            categories_dict[cat].append(formatted_game)
+            # 🚀 SEBAR GAME INI KE SEMUA FOLDER KATEGORI YANG DIMILIKINYA
+            for c in all_cats:
+                if c not in categories_dict:
+                    categories_dict[c] = []
+                categories_dict[c].append(formatted_game)
 
     categories_list = sorted(list(categories_dict.keys()))
 
